@@ -71,6 +71,7 @@ def gen_example(wordtoix, algo, args):
             max_len = np.max(cap_lens)
 
             sorted_indices = np.argsort(cap_lens)[::-1]
+            s = sentences
             cap_lens = np.asarray(cap_lens)
             cap_lens = cap_lens[sorted_indices]
             cap_array = np.zeros((len(captions), max_len), dtype='int64')
@@ -80,7 +81,7 @@ def gen_example(wordtoix, algo, args):
                 c_len = len(cap)
                 cap_array[i, :c_len] = cap
             key = name[(name.rfind('/') + 1):]
-            data_dic[key] = [cap_array, cap_lens, sorted_indices]
+            data_dic[key] = [cap_array, cap_lens, sorted_indices, s]
     algo.gen_example(data_dic, args.save_maps)
 
 
