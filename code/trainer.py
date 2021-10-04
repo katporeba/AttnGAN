@@ -459,7 +459,8 @@ class condGANTrainer(object):
             for key in data_dic:
                 save_dir = '%s/%s' % (s_tmp, key)
                 mkdir_p(save_dir)
-                captions, cap_lens, sorted_indices = data_dic[key]
+                captions, cap_lens, sorted_indices, s = data_dic[key]
+                print(s)
 
                 batch_size = captions.shape[0]
                 nz = cfg.GAN.Z_DIM
@@ -487,7 +488,7 @@ class condGANTrainer(object):
                     # G attention
                     cap_lens_np = cap_lens.cpu().data.numpy()
                     for j in range(batch_size):
-                        save_name = '%s/%d_s_%d' % (save_dir, i, sorted_indices[j])
+                        save_name = '%s/%d_%s' % (save_dir, i, s[sorted_indices[j]].replace(' ','-'))
                         for k in range(len(fake_imgs)):
                             im = fake_imgs[k][j].data.cpu().numpy()
                             im = (im + 1.0) * 127.5
