@@ -29,11 +29,12 @@ def parse_args():
     parser.add_argument('--gpu', dest='gpu_id', type=int, default=-1)
     parser.add_argument('--data_dir', dest='data_dir', type=str, default='')
     parser.add_argument('--manualSeed', type=int, help='manual seed')
+    parser.add_argument('--save_maps', action='store_true')
     args = parser.parse_args()
     return args
 
 
-def gen_example(wordtoix, algo):
+def gen_example(wordtoix, algo, args):
     '''generate images from example sentences'''
     from nltk.tokenize import RegexpTokenizer
     filepath = '%s/example_filenames.txt' % (cfg.DATA_DIR)
@@ -80,7 +81,7 @@ def gen_example(wordtoix, algo):
                 cap_array[i, :c_len] = cap
             key = name[(name.rfind('/') + 1):]
             data_dic[key] = [cap_array, cap_lens, sorted_indices]
-    algo.gen_example(data_dic)
+    algo.gen_example(data_dic, args.save_maps)
 
 
 if __name__ == "__main__":
@@ -143,6 +144,6 @@ if __name__ == "__main__":
         if cfg.B_VALIDATION:
             algo.sampling(split_dir)  # generate images for the whole valid dataset
         else:
-            gen_example(dataset.wordtoix, algo)  # generate images for customized captions
+            gen_example(dataset.wordtoix, algo, args)  # generate images for customized captions
     end_t = time.time()
     print('Total time for training:', end_t - start_t)
